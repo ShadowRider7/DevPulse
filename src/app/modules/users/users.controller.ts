@@ -17,6 +17,24 @@ const createUser = async (req: Request, res: Response) => {
     });
   }
 };
+const userInfoGet = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const result = await userService.getSingleUserFromDb(id as string);
+    res.status(201).json({
+      success: true,
+      message: "User found Successfully!!",
+      data: result.rows[0],
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: error,
+    });
+  }
+};
 export const userController = {
   createUser,
+  userInfoGet,
 };

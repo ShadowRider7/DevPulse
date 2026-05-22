@@ -12,7 +12,16 @@ const createUserIntoDb = async (payload: IUser) => {
   );
   return result;
 };
+const getSingleUserFromDb = async (id: string) => {
+  const result = await pool.query(
+    ` SELECT * FROM users WHERE id=$1
+        `,
+    [id],
+  );
+  return result;
+};
 
 export const userService = {
   createUserIntoDb,
+  getSingleUserFromDb,
 };

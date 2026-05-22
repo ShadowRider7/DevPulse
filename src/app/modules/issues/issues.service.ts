@@ -28,8 +28,34 @@ const getSingleIssueFromDb = async (id: string) => {
   );
   return result;
 };
+const updateIssueFromDb = async (payload: IIssue, id: string) => {
+  const { title, description } = payload;
+  const result = await pool.query(
+    ` UPDATE issues 
+    SET 
+    title=COALESCE($1,title),
+    description=COALESCE($2,description),
+    status='in_progress',
+     updated_at = CURRENT_TIMESTAMP
+     WHERE id = $3
+    RETURNING *
+        `,
+    [title, description, id],
+  );
+  return result;
+};
+const deleteIssueFromDb = async (id: string) => {
+  const result = await pool.query(
+    ` DELETE FROM issues WHERE id = $1
+        `,
+    [id],
+  );
+  return result;
+};
 export const issueService = {
   issueIntoDb,
   getIssueFromDb,
   getSingleIssueFromDb,
+  updateIssueFromDb,
+  deleteIssueFromDb,
 };
