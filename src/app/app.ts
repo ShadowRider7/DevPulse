@@ -7,6 +7,7 @@ import { userRoute } from "./modules/users/users.route";
 import { issueRoute } from "./modules/issues/issues.route";
 import { authRoute } from "./modules/auth/auth.route";
 import globalErrorHandler from "./utils/globalErrorHandler";
+import sendResponse from "./utils/sendResponse";
 
 const app: Application = express();
 
@@ -15,7 +16,15 @@ app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "DevPulse API Server Running",
+    data: {
+      auth: "/api/auth",
+      issues: "/api/issues",
+    },
+  });
 });
 app.use("/api/auth", userRoute);
 app.use("/api/issues", issueRoute);

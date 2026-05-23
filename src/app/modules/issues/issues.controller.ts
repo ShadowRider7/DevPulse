@@ -102,7 +102,7 @@ const deleteIssue = async (req: Request, res: Response) => {
   try {
     await issueService.deleteIssueFromDb(id as string);
     sendResponse(res, {
-      statusCode: 200,
+      statusCode: 204,
       success: true,
       message: "Issue deleted successfully",
     });
