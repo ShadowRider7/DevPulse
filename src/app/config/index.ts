@@ -8,7 +8,7 @@ export const initDB = async () => {
         name VARCHAR(100) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password TEXT NOT NULL,
-        role VARCHAR(20) DEFAULT 'contributor',
+        role VARCHAR(20),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -21,7 +21,7 @@ export const initDB = async () => {
         description TEXT NOT NULL,
         type VARCHAR(30) NOT NULL,
         status VARCHAR(30) DEFAULT 'open',
-        reporter_id INTEGER NOT NULL,
+        reporter_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
