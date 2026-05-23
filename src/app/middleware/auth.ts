@@ -1,9 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { pool } from "../config/db";
+import type { ROLES } from "../utils";
 
-const auth = () => {
+const auth = (...roles: ROLES[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
+    console.log(roles);
     try {
       const token = req.headers.authorization;
       if (!token) {
@@ -33,8 +35,7 @@ const auth = () => {
           message: "User not found",
         });
       }
-
-      if (user.role === "contributor") {
+      if (roles.length && !roles.includes(user.role)) {
         res.status(403).json({
           success: false,
           message: "Forbidden!",

@@ -2,8 +2,9 @@ import type { Request, Response } from "express";
 import { issueService } from "./issues.service";
 
 const createIssue = async (req: Request, res: Response) => {
+  const id = req.user?.id;
   try {
-    const result = await issueService.issueIntoDb(req.body);
+    const result = await issueService.issueIntoDb(req.body, id);
     res.status(201).json({
       success: true,
       message: "Issue Created Successfully!!",

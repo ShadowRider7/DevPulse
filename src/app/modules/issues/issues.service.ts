@@ -1,25 +1,14 @@
-import { error } from "node:console";
 import { pool } from "../../config/db";
 import type { IIssue } from "./issue.interface";
 
-const issueIntoDb = async (payload: IIssue) => {
-  const { title, description, type, reporter_id } = payload;
-
-  const user = await pool.query(
-    `
-    SELECT * FROM users WHERE id=$1
-    `,
-    [reporter_id],
-  );
-  if (user.rowCount === 0) {
-    throw new Error("User not exists!");
-  }
+const issueIntoDb = async (payload: IIssue, id: number) => {
+  const { title, description, type } = payload;
   const result = await pool.query(
     `
         INSERT INTO issues(title,description,type,reporter_id) VALUES ($1,$2,$3,$4)
         RETURNING *
         `,
-    [title, description, type, reporter_id],
+    [title, description, type, id],
   );
   return result;
 };
@@ -57,7 +46,9 @@ const updateIssueFromDb = async (payload: IIssue, id: string) => {
 };
 const deleteIssueFromDb = async (id: string) => {
   const result = await pool.query(
-    ` DELETE FROM issues WHERE id = $1
+    ` DELETE FROM issues
+WHERE id = $1
+RETURNING *
         `,
     [id],
   );
